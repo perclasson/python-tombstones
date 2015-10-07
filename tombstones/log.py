@@ -21,7 +21,7 @@ class LogEntry(namedtuple(
         return self.source_file + str(self.line_number)
 
 
-def log_entry(entry):
+def save_log_entry(entry):
     with open(FILENAME, 'a') as log_file:
         json.dump(entry._asdict(), log_file)
         log_file.write('\n')
