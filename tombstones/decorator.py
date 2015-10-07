@@ -15,8 +15,7 @@ def line_number_for_tombstone(lines, line_number):
     for line in lines:
         if line.strip() == "@tombstone":
             break
-        else:
-            line_number += 1
+        line_number += 1
     return line_number
 
 
