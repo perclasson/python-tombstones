@@ -5,6 +5,9 @@ python:
 install:
   - pip install flake8
   - pip install tox
+  - pip install coveralls
   - make install
 script:
   - make flake8 test
+after_success:
+  - coveralls
