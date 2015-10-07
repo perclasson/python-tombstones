@@ -18,7 +18,6 @@ def log_entry():
 
 
 def test_log_entry_str(log_entry):
-    print(log_entry)
     assert str(log_entry) == (
         "name in source_file at line number 1\n"
         "Last used at datetime"

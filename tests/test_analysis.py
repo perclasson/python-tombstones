@@ -18,8 +18,8 @@ SECOND_LOG_ENTRY = LogEntry(
     datetime="2015-10-07 16:14:18.965741",
 )
 
-FIRST_JSON_ENTRY = json.dumps(FIRST_LOG_ENTRY._asdict())
-SECOND_JSON_ENTRY = json.dumps(SECOND_LOG_ENTRY._asdict())
+FIRST_JSON_ENTRY = json.dumps(FIRST_LOG_ENTRY.as_dict())
+SECOND_JSON_ENTRY = json.dumps(SECOND_LOG_ENTRY.as_dict())
 
 FIRST_TWICE_AS_JSON_ENTRIES = '\n'.join(
     [FIRST_JSON_ENTRY]*2,

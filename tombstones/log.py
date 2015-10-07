@@ -15,17 +15,17 @@ class LogEntry(namedtuple(
         return (
             "{name} in {source_file} at line number {line_number}\n"
             "Last used at {datetime}"
-        ).format(**self._asdict())
+        ).format(**self.as_dict())
 
     @property
     def unique_id(self):
         return self.source_file + str(self.line_number)
 
-    def _asdict(self):
+    def as_dict(self):
         return OrderedDict(zip(self._fields, self))
 
 
 def save_log_entry(entry):
     with open(FILENAME, 'a') as log_file:
-        json.dump(entry._asdict(), log_file)
+        json.dump(entry.as_dict(), log_file)
         log_file.write('\n')
