@@ -5,6 +5,7 @@ from collections import namedtuple
 
 FILENAME = resource_filename('tombstones', 'tombstones.log')
 
+
 class LogEntry(namedtuple(
     'LogEntry',
     ['name', 'source_file', 'line_number', 'datetime']
@@ -14,6 +15,10 @@ class LogEntry(namedtuple(
             "{name} in {source_file} at line number {line_number}\n"
             "Last used at {datetime}"
         ).format(**self._asdict())
+
+    @property
+    def unique_id(self):
+        return self.source_file + str(self.line_number)
 
 
 def log_entry(entry):
