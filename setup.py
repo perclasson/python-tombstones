@@ -3,7 +3,7 @@ from setuptools import setup
 setup_kwargs = dict(
     name='tombstones',
     version='0.1',
-    description='Python module to identify unreachable code.',
+    description='Python package to mark dead code.',
     license='BSD',
     author='Per Classon',
     author_email='perwclasson@gmail.com',
