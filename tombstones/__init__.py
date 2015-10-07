@@ -1,1 +1,1 @@
-from tombstones.decorator import tombstone
+from tombstones.decorator import tombstone  # NOQA

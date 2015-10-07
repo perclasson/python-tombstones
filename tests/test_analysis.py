@@ -57,6 +57,11 @@ def test_first_and_second_log_entry():
     assert len(unique_log_entries()) == 2
 
 
+@mock.patch('tombstones.analysis.open', side_effect=IOError)
+def test_entries_when_error(mock_open):
+    assert unique_log_entries() == {}
+
+
 @mock.patch('tombstones.analysis.unique_log_entries')
 @mock.patch('tombstones.analysis.print')
 def test_active_tombstones(mock_print, mock_log_entries):
