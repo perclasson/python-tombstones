@@ -1,9 +1,35 @@
 from __future__ import print_function
 
-import os
 import sys
 
-from tombstones.analysis import find_tombstones
+from tombstones.analysis import active_tombstones
+
+ALL_COMMANDS = {}
+
+
+def command(name, options='', description=''):
+    def wrapper(wrapped):
+        wrapped.name = name
+        wrapped.options = name
+        wrapped.description = description
+        ALL_COMMANDS[name] = wrapped
+        return wrapped
+    return wrapper
+
+
+@command('help', '[command]')
+def help(args):
+    print('Usage: tombstones command [options]', end='')
+    print()
+    print('Available commands are:')
+
+    for name in ALL_COMMANDS:
+        print(name)
+
+
+@command('active')
+def active(args):
+    active_tombstones()
 
 
 def main(args=None):
@@ -11,13 +37,16 @@ def main(args=None):
     if args is None:
         args = sys.argv[1:]
 
-    dirname = args[0]
+    if args:
+        command = args[0]
+    else:
+        command = 'help'
 
-    if not dirname or not os.path.isdir(dirname):
-        print("You must give a directory as first argument.")
+    if command not in ALL_COMMANDS:
+        print("Unknown command '{}'. Type 'tombstones help' for usage.".format(
+            command))
         return
+    return ALL_COMMANDS[command](args[1:])
 
-    find_tombstones(os.path.realpath(dirname))
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

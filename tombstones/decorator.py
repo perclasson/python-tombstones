@@ -4,18 +4,11 @@ from __future__ import unicode_literals
 import datetime
 import inspect
 import os
-import json
 
 import wrapt
 
-from pkg_resources import resource_filename
-
-
-def log_entry(entry):
-    filename = resource_filename('tombstones', 'tombstones.log')
-    with open(filename, 'a') as log_file:
-        json.dump(entry, log_file)
-        log_file.write('\n')
+from tombstones.log import LogEntry
+from tombstones.log import log_entry
 
 
 def line_number_for_tombstone(wrapped):
@@ -29,11 +22,10 @@ def line_number_for_tombstone(wrapped):
 @wrapt.decorator
 def tombstone(wrapped, instance, args, kwargs):
     """Tombstone decorator to save log entry."""
-    entry = dict(
+    log_entry(LogEntry(
         name=wrapped.__name__,
         source_file=os.path.abspath(inspect.getsourcefile(wrapped)),
         line_number=line_number_for_tombstone(wrapped),
         datetime=str(datetime.datetime.now()),
-    )
-    log_entry(entry)
+    ))
     return wrapped(*args, **kwargs)

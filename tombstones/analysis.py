@@ -1,20 +1,22 @@
 from __future__ import print_function
-import fnmatch
-import inspect
-import os
-import sys
-import pkgutil
 
-def find_tombstones(dirname):
-    for importer, name, ispkg in pkgutil.iter_modules([dirname]):
-        try:
-            module = importer.find_module(name).load_module(name)
+import json
 
-            classes = inspect.getmembers(module, inspect.isclass)
-            methods = inspect.getmembers(module, inspect.ismethod)
-            functions = inspect.getmembers(module, inspect.isfunction)
+from tombstones.log import FILENAME
+from tombstones.log import LogEntry
 
-            tombstones = [fn for _, fn in inspect.getmembers(module) if hasattr(fn, '__tombstone__')]
-            print("tombstones", [t.__name__ for t in tombstones])
-        except:
-            print("Could not load {}.".format(name))
+def active_tombstones():
+    log_entries = {}
+    with open(FILENAME, 'r') as log_file:
+        for line in log_file.readlines():
+            log_entry = LogEntry(**json.loads(line.strip()))
+
+            if log_entry.name not in log_entries:
+                log_entries[log_entry.name] = log_entry
+            else:
+                log_entries[log_entry.name].datetime = log_entry.datetime
+    print("Active tombstones")
+    print("-----------------")
+    for log_entry in log_entries.values():
+        print(log_entry)
+        print()
