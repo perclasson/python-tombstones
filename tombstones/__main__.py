@@ -7,17 +7,14 @@ from tombstones.analysis import active_tombstones
 ALL_COMMANDS = {}
 
 
-def command(name, options='', description=''):
+def command(name):
     def wrapper(wrapped):
-        wrapped.name = name
-        wrapped.options = name
-        wrapped.description = description
         ALL_COMMANDS[name] = wrapped
         return wrapped
     return wrapper
 
 
-@command('help', '[command]')
+@command('help')
 def help(args):
     print('Usage: tombstones command [options]', end='')
     print()
