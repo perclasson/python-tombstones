@@ -4,23 +4,6 @@ from tombstones import tombstone
 from tombstones.decorator import line_number_for_tombstone
 
 
-def test_tombstone_decorator():
-    def function(test_value):
-        return test_value
-
-    decorated_func = tombstone(function)
-    assert decorated_func == function
-
-
-@mock.patch('tombstones.decorator.save_log_entry')
-def test_save_log_entry(mock_save_log_entry):
-    @tombstone
-    def function():
-        pass
-    function()
-    assert mock_save_log_entry.called
-
-
 @mock.patch('tombstones.decorator.save_log_entry')
 @mock.patch('tombstones.decorator.LogEntry')
 @mock.patch('datetime.datetime')
@@ -36,10 +19,46 @@ def test_log_entry_arguments(mock_datetime, log_entry, mock_save_log_entry):
     assert log_entry.called
     log_entry.assert_called_with(
         name='test_function',
-        line_number=31,
+        line_number=14,
         datetime=now,
         source_file=__file__,
     )
+
+
+def test_tombstone_decorator():
+    def function(test_value):
+        return test_value
+
+    decorated_func = tombstone(function)
+    assert decorated_func == function
+
+
+@mock.patch('tombstones.decorator.save_log_entry')
+def test_decorated_function(mock_save_log_entry):
+    @tombstone
+    def function():
+        pass
+    function()
+    assert mock_save_log_entry.called
+
+
+@mock.patch('tombstones.decorator.save_log_entry')
+def test_decorated_class(mock_save_log_entry):
+    @tombstone
+    class Example(object):
+        pass
+    Example()
+    assert mock_save_log_entry.called
+
+
+@mock.patch('tombstones.decorator.save_log_entry')
+def test_decorated_method(mock_save_log_entry):
+    class Example(object):
+        @tombstone
+        def example_method(self):
+            pass
+    Example().example_method()
+    assert mock_save_log_entry.called
 
 
 def test_first_line_number_for_tombstone():
