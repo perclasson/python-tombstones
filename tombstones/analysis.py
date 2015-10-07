@@ -11,7 +11,8 @@ def unique_log_entries():
     try:
         with open(FILENAME, 'r') as log_file:
             for line in log_file.readlines():
-                log_entry = LogEntry(**json.loads(line.strip()))
+                json_entry = json.loads(line.strip())
+                log_entry = LogEntry(**json_entry)
                 log_entries[log_entry.unique_id] = log_entry
     except IOError:
         pass

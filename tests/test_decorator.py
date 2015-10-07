@@ -12,6 +12,7 @@ def test_tombstone_decorator():
     assert decorated_func == function
 
 
+@mock.patch('tombstones.decorator.save_log_entry')
 def test_save_log_entry(mock_save_log_entry):
     @tombstone
     def function():
@@ -20,9 +21,10 @@ def test_save_log_entry(mock_save_log_entry):
     assert mock_save_log_entry.called
 
 
+@mock.patch('tombstones.decorator.save_log_entry')
 @mock.patch('tombstones.decorator.LogEntry')
 @mock.patch('datetime.datetime')
-def test_log_entry_arguments(mock_datetime, mock_log_entry):
+def test_log_entry_arguments(mock_datetime, log_entry, mock_save_log_entry):
     now = str(mock.MagicMock())
     mock_datetime.now.return_value = now
 
@@ -31,10 +33,10 @@ def test_log_entry_arguments(mock_datetime, mock_log_entry):
         pass
     test_function()
 
-    assert mock_log_entry.called
-    mock_log_entry.assert_called_with(
+    assert log_entry.called
+    log_entry.assert_called_with(
         name='test_function',
-        line_number=29,
+        line_number=31,
         datetime=now,
         source_file=__file__,
     )

@@ -1,29 +1,28 @@
-import mock
-
 import json
+import mock
 
 from tombstones.analysis import unique_log_entries
 from tombstones.analysis import active_tombstones
 from tombstones.log import LogEntry
 
-FIRST_LOG_ENTRY = LogEntry(**{
-    "name": "first_function",
-    "source_file": "test_decorator.py",
-    "line_number": 16,
-    "datetime": "2015-10-07 16:14:18.965741",
-})
-SECOND_LOG_ENTRY = LogEntry(**{
-    "name": "second_function",
-    "source_file": "test_decorator.py",
-    "line_number": 20,
-    "datetime": "2015-10-08 16:14:18.965741",
-})
+FIRST_LOG_ENTRY = LogEntry(
+    name="first_function",
+    source_file="test_decorator.py",
+    line_number=16,
+    datetime="2015-10-07 16:14:18.965741",
+)
+SECOND_LOG_ENTRY = LogEntry(
+    name="second_function",
+    source_file="test_decorator.py",
+    line_number=20,
+    datetime="2015-10-07 16:14:18.965741",
+)
 
 FIRST_JSON_ENTRY = json.dumps(FIRST_LOG_ENTRY._asdict())
 SECOND_JSON_ENTRY = json.dumps(SECOND_LOG_ENTRY._asdict())
 
-FIRST_TWICE_AS_JSON_ENTRIES = '\n'.join([
-    FIRST_JSON_ENTRY]*2,
+FIRST_TWICE_AS_JSON_ENTRIES = '\n'.join(
+    [FIRST_JSON_ENTRY]*2,
 )
 FIRST_AND_SECOND_AS_JSON_ENTRIES = '\n'.join(
     [FIRST_JSON_ENTRY, SECOND_JSON_ENTRY]
@@ -67,10 +66,10 @@ def test_active_tombstones(mock_print, mock_log_entries):
 
     active_tombstones()
     assert mock_print.called
-    mock_print.has_calls([
+    mock_print.assert_has_calls([
         mock.call("Active tombstones"),
         mock.call("-----------------"),
-        mock.call(str(FIRST_LOG_ENTRY)),
+        mock.call(FIRST_LOG_ENTRY),
     ])
 
 
