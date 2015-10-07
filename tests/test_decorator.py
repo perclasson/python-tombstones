@@ -31,6 +31,7 @@ def test_log_entry_arguments(mock_datetime, mock_log_entry):
         pass
     test_function()
 
+    assert mock_log_entry.called
     mock_log_entry.assert_called_with(
         name='test_function',
         line_number=29,
