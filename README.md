@@ -8,7 +8,7 @@ Python package to mark code that you suspect is unreachable or dead.
 To install the package:
 
 ```shell
-$ python setup.py install
+$ pip install tombstones
 ```
 
 # Usage
